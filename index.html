@@ -587,6 +587,25 @@ function openModal(p) {
       a.appendChild(document.createTextNode(lnk.label));
       a.target = '_blank';
       a.rel = 'noopener noreferrer';
+      (function(url) {
+        a.addEventListener('click', function(e) {
+          e.preventDefault();
+          var w = Math.round(window.screen.width * 0.75);
+          var h = Math.round(window.screen.height * 0.75);
+          var left = Math.round((window.screen.width - w) / 2);
+          var top = Math.round((window.screen.height - h) / 2);
+          var win = null;
+          try {
+            win = window.open(url, '_blank', 'width=' + w + ',height=' + h + ',left=' + left + ',top=' + top + ',resizable=yes,scrollbars=yes');
+          } catch (err) { win = null; }
+          if (!win) {
+            // Popup blocked: open as a normal new tab instead
+            var t = document.createElement('a');
+            t.href = url; t.target = '_blank'; t.rel = 'noopener noreferrer';
+            document.body.appendChild(t); t.click(); document.body.removeChild(t);
+          }
+        });
+      })(lnk.url);
       linksEl.appendChild(a);
     });
   } else {
