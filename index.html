@@ -359,6 +359,28 @@
     .row-aside { width: 100px; }
     .programs-grid { grid-template-columns: 1fr; }
   }
+
+  /* Parent site: "View more" label directly beneath each thumbnail */
+  .row-thumb-col { width: 140px; flex-shrink: 0; display: flex; flex-direction: column; }
+  .row-thumb-col .row-thumb { width: 100%; flex: 1; cursor: pointer; }
+  .row-thumb img { transition: transform 0.3s; }
+  .row-thumb-col:hover .row-thumb img { transform: scale(1.05); }
+  .thumb-label {
+    display: flex; align-items: center; justify-content: center; gap: 6px;
+    width: 100%; padding: 8px 6px; border: 0; cursor: pointer;
+    background: #141b4d; color: #fff;
+    font-family: 'Source Sans 3', sans-serif; font-size: 11px; font-weight: 700;
+    letter-spacing: 0.07em; text-transform: uppercase; white-space: nowrap;
+    transition: background 0.2s, color 0.2s;
+  }
+  .thumb-label-icon { color: #ffc72c; font-size: 9px; transition: color 0.2s; }
+  .row-thumb-col:hover .thumb-label, .thumb-label:hover, .thumb-label:focus-visible { background: #263080; color: #fff; }
+    .thumb-label:focus-visible { outline: 3px solid #68d2df; outline-offset: -3px; }
+  @media (max-width: 700px) {
+    .row-thumb-col { width: 90px; }
+    .thumb-label { font-size: 9px; padding: 7px 2px; gap: 4px; letter-spacing: 0.03em; }
+    .thumb-label-icon { font-size: 7px; }
+  }
 </style>
 </head>
 <body>
@@ -528,7 +550,7 @@ function renderProjects() {
 
   list.innerHTML = filtered.map(p => `
     <div class="project-row" style="--row-accent: ${p.accent}">
-      <div class="row-thumb ${p.bgClass}" onclick="openModal(PROJECTS.find(x=>x.id===${p.id}))" style="cursor:pointer;" title="View project links">${p.imageUrl ? `<img src="${driveUrl(p.imageUrl)}" alt="${p.title}" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;border-radius:0;" onerror="this.style.display='none'">` : p.icon}</div>
+      <div class="row-thumb-col"><div class="row-thumb ${p.bgClass}" onclick="openModal(PROJECTS.find(x=>x.id===${p.id}))" title="View more">${p.imageUrl ? `<img src="${driveUrl(p.imageUrl)}" alt="${p.title}" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;border-radius:0;" onerror="this.style.display='none'">` : p.icon}</div>${(p.links || []).length ? `<button type="button" class="thumb-label" onclick="openModal(PROJECTS.find(x=>x.id===${p.id}))" aria-label="View more: ${p.title}"><span class="thumb-label-icon">&#9654;</span> View more</button>` : ''}</div>
       <div class="row-details">
         <div class="row-main">
           <div class="row-meta">
